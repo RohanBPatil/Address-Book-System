@@ -20,4 +20,10 @@ public class person {
 		this.phone_num = phone_num;
 		this.email = email;
 	}
+	
+	public String toString() {
+		String details = "First Name : " + first_name + "\nLast Name : " + last_name + "\nAddress : " + address + "\nCity : " + city 
+							+ "\nState : " + state + "\nZIP : " + zip + "\nPhone Number : " + phone_num + "\nEmail ID : " + email + "\n";
+		return details;
+	}
 }
