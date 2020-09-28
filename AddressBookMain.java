@@ -99,6 +99,24 @@ public class AddressBookMain {
 		}
 	}
 	
+	public void deletePersonDetails() {
+		Scanner sc = new Scanner(System.in);
+		String FirstName;
+		String LastName;
+		
+		System.out.println("Enter name of a person to DELETE contact details");
+		System.out.println("First Name : ");
+		FirstName = sc.nextLine();
+		System.out.println("Last Name : ");
+		LastName = sc.nextLine();
+		
+		for(int i = 0; i < personList.size(); i++) {
+			if(FirstName.equalsIgnoreCase(personList.get(i).first_name) && LastName.equalsIgnoreCase(personList.get(i).last_name)) {
+				personList.remove(personList.get(i));
+			}
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		System.out.println("WELCOME TO ADDRESS BOOK");
@@ -113,6 +131,12 @@ public class AddressBookMain {
 		address_book_main.editPersonDetails();
 		
 		//Displaying all contacts from Address book after editing
+		address_book_main.displayAllContacts();
+		
+		//deleting details
+		address_book_main.deletePersonDetails();
+		
+		//Displaying all contacts from Address book after deleting
 		address_book_main.displayAllContacts();
 		
 	}
