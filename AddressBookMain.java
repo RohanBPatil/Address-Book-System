@@ -3,9 +3,11 @@ package AddressBookMain;
 import java.util.*;
 
 public class AddressBookMain {
+	public String name;
 	public List <person> personList;
-	public AddressBookMain() {
+	public AddressBookMain(String name) {
 		personList = new ArrayList<person>();
+		this.name = name;
 	}
 	
 	public void displayAllContacts() {
@@ -121,7 +123,7 @@ public class AddressBookMain {
 	public static void main(String[] args) {
 		System.out.println("WELCOME TO ADDRESS BOOK");
 		
-		AddressBookMain address_book_main = new AddressBookMain();
+		AddressBookMain address_book_main = new AddressBookMain("First Address Book");
 		address_book_main.addPersonDetails();
 		
 		//Displaying all contacts from Address book
@@ -139,5 +141,27 @@ public class AddressBookMain {
 		//Displaying all contacts from Address book after deleting
 		address_book_main.displayAllContacts();
 		
+		
+		
+		/**************************************************************************************************************************/
+		//New address book
+		AddressBookMain new_address_book_main = new AddressBookMain("Second Address Book");
+		
+		new_address_book_main.addPersonDetails();
+		
+		//Displaying all contacts from Address book
+		new_address_book_main.displayAllContacts();
+		
+		//editing details
+		new_address_book_main.editPersonDetails();
+		
+		//Displaying all contacts from Address book after editing
+		new_address_book_main.displayAllContacts();
+		
+		//deleting details
+		new_address_book_main.deletePersonDetails();
+		
+		//Displaying all contacts from Address book after deleting
+		new_address_book_main.displayAllContacts();
 	}
 }
