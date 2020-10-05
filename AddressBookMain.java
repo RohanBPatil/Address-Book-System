@@ -2,166 +2,59 @@ package AddressBookMain;
 
 import java.util.*;
 
-public class AddressBookMain {
-	public String name;
-	public List <person> personList;
-	public AddressBookMain(String name) {
-		personList = new ArrayList<person>();
-		this.name = name;
-	}
-	
-	public void displayAllContacts() {
-		System.out.println("DISPLAYING ALL CONTACT DETAILS FROM ADDRESS BOOK");
-		for(int i = 0; i < personList.size(); i++) {
-			System.out.println(personList.get(i));
-		}
-	}
-	
-	
-	public void addPersonDetails() {
-		Scanner sc = new Scanner(System.in);
-		
-		String checkToAdd = "y";
-		
-		while(checkToAdd.equalsIgnoreCase("y")) {
-			//variables
-			String first_name;
-			String last_name;
-			String address;
-			String city;
-			String state;
-			int zip;
-			long  phone_num;
-			String email;
-			
-			System.out.println("Enter following details : ");
-			System.out.println("First Name : ");
-			first_name = sc.nextLine();
-			System.out.println("Last Name : ");
-			last_name = sc.nextLine();
-			System.out.println("Address : ");
-			address = sc.nextLine();
-			System.out.println("City : ");
-			city = sc.nextLine();
-			System.out.println("State : ");
-			state = sc.nextLine();
-			System.out.println("ZIP : ");
-			zip = sc.nextInt();
-			System.out.println("Phone number : ");
-			phone_num = sc.nextLong();
-			sc.nextLine();
-			System.out.println("Email ID : ");
-			email = sc.nextLine();
-			
-			person new_person = new person(first_name, last_name, address, city, state, zip, phone_num, email);
-			personList.add(new_person);
-			
-			System.out.println("Enter 'y' to add new person's details.\nEnter any other key to stop.");
-			checkToAdd = sc.nextLine();
-		}
-		
-	}
-	
-	public void editPersonDetails() {
-		String FirstName;
-		String LastName;
-		String address;
-		String city;
-		String state;
-		int zip;
-		long  phone_num;
-		String email;
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.println("Enter name of a person to edit contact details");
-		System.out.println("First Name : ");
-		FirstName = sc.nextLine();
-		System.out.println("Last Name : ");
-		LastName = sc.nextLine();
-		
-		for(int i = 0; i < personList.size(); i++) {
-			if(FirstName.equalsIgnoreCase(personList.get(i).first_name) && LastName.equalsIgnoreCase(personList.get(i).last_name)) {
-				System.out.println("Address : ");
-				address = sc.nextLine();
-				System.out.println("City : ");
-				city = sc.nextLine();
-				System.out.println("State : ");
-				state = sc.nextLine();
-				System.out.println("ZIP : ");
-				zip = sc.nextInt();
-				System.out.println("Phone number : ");
-				phone_num = sc.nextLong();
-				sc.nextLine();
-				System.out.println("Email ID : ");
-				email = sc.nextLine();
-				
-				person new_person = new person(FirstName, LastName, address, city, state, zip, phone_num, email);
-				personList.set(i, new_person);
-			}
-		}
-	}
-	
-	public void deletePersonDetails() {
-		Scanner sc = new Scanner(System.in);
-		String FirstName;
-		String LastName;
-		
-		System.out.println("Enter name of a person to DELETE contact details");
-		System.out.println("First Name : ");
-		FirstName = sc.nextLine();
-		System.out.println("Last Name : ");
-		LastName = sc.nextLine();
-		
-		for(int i = 0; i < personList.size(); i++) {
-			if(FirstName.equalsIgnoreCase(personList.get(i).first_name) && LastName.equalsIgnoreCase(personList.get(i).last_name)) {
-				personList.remove(personList.get(i));
-			}
-		}
-	}
-	
+public class AddressBookMain extends AddressBook{
 	
 	public static void main(String[] args) {
+		
 		System.out.println("WELCOME TO ADDRESS BOOK");
 		
-		AddressBookMain address_book_main = new AddressBookMain("First Address Book");
-		address_book_main.addPersonDetails();
-		
-		//Displaying all contacts from Address book
-		address_book_main.displayAllContacts();
-		
-		//editing details
-		address_book_main.editPersonDetails();
-		
-		//Displaying all contacts from Address book after editing
-		address_book_main.displayAllContacts();
-		
-		//deleting details
-		address_book_main.deletePersonDetails();
-		
-		//Displaying all contacts from Address book after deleting
-		address_book_main.displayAllContacts();
-		
-		
-		
-		/**************************************************************************************************************************/
-		//New address book
-		AddressBookMain new_address_book_main = new AddressBookMain("Second Address Book");
-		
-		new_address_book_main.addPersonDetails();
-		
-		//Displaying all contacts from Address book
-		new_address_book_main.displayAllContacts();
-		
-		//editing details
-		new_address_book_main.editPersonDetails();
-		
-		//Displaying all contacts from Address book after editing
-		new_address_book_main.displayAllContacts();
-		
-		//deleting details
-		new_address_book_main.deletePersonDetails();
-		
-		//Displaying all contacts from Address book after deleting
-		new_address_book_main.displayAllContacts();
+		Scanner scanner = new Scanner(System.in);
+		HashMap<String, AddressBook> addressBookMap = new HashMap<>();
+		do {
+			System.out.println("1. Add new address book"+"\n2. Perform action on existing address book");
+			int option = scanner.nextInt();
+			scanner.nextLine();
+			
+			switch(option) {
+				case 1:
+					System.out.println("Enter city name : ");
+					String addressBookName = scanner.nextLine();
+					AddressBook NewAddressBook = new AddressBook(addressBookName);
+					addressBookMap.put(addressBookName, NewAddressBook);
+					NewAddressBook.addPersonDetails();
+					break;
+					
+				case 2:
+					System.out.println("Enter city name : ");
+					addressBookName = scanner.nextLine();
+					System.out.println("1. Add details\n2. Edit details\n3. Delete details\n4. Display all contacts");
+					int choice = scanner.nextInt();
+					scanner.nextLine();
+					
+					switch(choice) {
+					case 1:
+						addressBookMap.get(addressBookName).addPersonDetails();
+						break;
+					case 2:
+						addressBookMap.get(addressBookName).editPersonDetails();
+						break;
+					case 3:
+						addressBookMap.get(addressBookName).deletePersonDetails();
+						break;
+					case 4:
+						addressBookMap.get(addressBookName).displayAllContacts();
+						break;
+					default:
+						System.out.println("Select correct choice");
+						break;
+					}
+					break;
+				default:
+					System.out.println("Select correct option");
+					break;
+			}
+			System.out.println("Enter 'y' if you want to PERFORM NEW ACTION \nEnter any other key to EXIT");
+			
+		}while(scanner.nextLine().equalsIgnoreCase("y"));
 	}
 }
