@@ -123,6 +123,25 @@ public class AddressBookMain extends AddressBook {
 		}
 	}
 	
+	public void countByCity(String city) {
+		long count = 0;
+		for(Map.Entry<String,AddressBook> entry : StateAddressBookMap.entrySet()) {
+			count = entry.getValue().getPersonList().stream()
+					.filter(c -> c.getCity().equals(city))
+					.count();
+		}
+		System.out.println("Number of contacts in '" + city + "' : " + count);
+	}
+	public void countByState(String state) {
+		long count = 0;
+		for(Map.Entry<String,AddressBook> entry : StateAddressBookMap.entrySet()) {
+			count = entry.getValue().getPersonList().stream()
+					.filter(c -> c.getCity().equals(state))
+					.count();
+		}
+		System.out.println("Number of contacts in '" + state + "' : " + count);
+	}
+	
 	public static void main(String[] args) {
 		
 		System.out.println("WELCOME TO ADDRESS BOOK");
@@ -140,7 +159,7 @@ public class AddressBookMain extends AddressBook {
 		
 		do {
 			System.out.println("1. Add contact\n2. Edit contact\n3. Delete contact\n4. Add new Address Book\n5. Search person by city\n6. Search person by state"
-					+ "\n7. View persons by city \n8. View by state");
+					+ "\n7. View persons by city \n8. View by state\n9. Count by city\n10. Count by state");
 			int option = scanner.nextInt();
 			switch(option) {
 			case 1:
@@ -185,6 +204,16 @@ public class AddressBookMain extends AddressBook {
 				System.out.println("Enter the state : ");
 				state = scanner.nextLine();
 				addressBookMain.viewPersonsByState(state);
+				break;
+			case 9:
+				System.out.println("Enter the city : ");
+				city = scanner.nextLine();
+				addressBookMain.countByCity(city);
+				break;
+			case 10:
+				System.out.println("Enter the state : ");
+				state = scanner.nextLine();
+				addressBookMain.countByState(state);
 				break;
 			default:
 				System.out.println("Select correct choice");
