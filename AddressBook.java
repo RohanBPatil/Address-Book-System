@@ -5,24 +5,21 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AddressBook {
-	public String name;
+	private String AddressBookName;
 	public List <Person> personList;
-	public AddressBook(String name) {
+	
+	public AddressBook(String AddressBookName) {
 		personList = new ArrayList<Person>();
-		this.name = name;
+		this.AddressBookName = AddressBookName;
 	}
 	
 	public AddressBook() {
 		personList = new ArrayList<Person>();
 	}
 	
-	public void displayAllContacts() {
-		System.out.println("DISPLAYING ALL CONTACT DETAILS FROM ADDRESS BOOK");
-		for(int i = 0; i < personList.size(); i++) {
-			System.out.println(personList.get(i));
-		}
+	public String getName() {
+		return AddressBookName;
 	}
-	
 	
 	public void addPersonDetails() {
 		Scanner scanner = new Scanner(System.in);
@@ -34,6 +31,7 @@ public class AddressBook {
 			String firstName;
 			String lastName;
 			String address;
+			String city;
 			String state;
 			int zip;
 			long  phoneNum;
@@ -46,7 +44,8 @@ public class AddressBook {
 			lastName = scanner.nextLine();
 			System.out.println("Address : ");
 			address = scanner.nextLine();
-			System.out.println("City : "+name);
+			System.out.println("City : ");
+			city = scanner.nextLine();
 			System.out.println("State : ");
 			state = scanner.nextLine();
 			System.out.println("ZIP : ");
@@ -57,8 +56,15 @@ public class AddressBook {
 			System.out.println("Email ID : ");
 			email = scanner.nextLine();
 			
-			Person new_person = new Person(firstName, lastName, address, name, state, zip, phoneNum, email);
-			personList.add(new_person);
+			Person new_person = new Person(firstName, lastName, address, city, state, zip, phoneNum, email);
+					
+			boolean duplicate = personList.stream().anyMatch(n -> n.equals(new_person));
+			if(!duplicate) {
+				personList.add(new_person);
+			}
+			else {
+				System.out.println("Same contact is already present Hence WILL NOT BE ADDED to address book");
+			}
 			
 			System.out.println("Enter 'y' to ADD NEW PERSON'S DETAILS.\nEnter any other key to STOP ADDING.");
 			checkToAdd = scanner.nextLine();
@@ -70,6 +76,8 @@ public class AddressBook {
 		String FirstName;
 		String LastName;
 		String address;
+		String city;
+		String state;
 		int zip;
 		long  phoneNum;
 		String email;
@@ -86,8 +94,12 @@ public class AddressBook {
 				System.out.println("New Address : ");
 				address = scanner.nextLine();
 				thatPerson.setAddress(address);
-				System.out.println("City : "+name);
-				System.out.println("State : "+thatPerson.getState());
+				System.out.println("New City : ");
+				city = scanner.nextLine();
+				thatPerson.setCity(city);
+				System.out.println("New State : ");
+				state = scanner.nextLine();
+				thatPerson.setState(state);
 				System.out.println("New ZIP : ");
 				zip = scanner.nextInt();
 				thatPerson.setZip(zip);
@@ -119,5 +131,5 @@ public class AddressBook {
 			}
 		}
 	}
-	
+
 }

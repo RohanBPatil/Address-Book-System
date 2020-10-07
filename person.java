@@ -69,9 +69,26 @@ public class Person {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	@Override
 	public String toString() {
 		String details = "First Name : " + firstName + "\nLast Name : " + lastName + "\nAddress : " + address + "\nCity : " + city 
 							+ "\nState : " + state + "\nZIP : " + zip + "\nPhone Number : " + phoneNum + "\nEmail ID : " + email + "\n";
 		return details;
+	}
+	
+	@Override
+	public boolean equals(Object object){
+	    boolean result = false;
+	    if((object == null) || (getClass() != object.getClass())){
+	        result = false;
+	    }
+	    else{
+	        Person person = (Person)object;
+	        String name = this.firstName + this.lastName;
+	        result = (name).equals(person.firstName + person.lastName);
+	    }
+
+	    return result;
 	}
 }
