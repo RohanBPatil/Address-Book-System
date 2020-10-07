@@ -5,7 +5,8 @@ import java.util.stream.Collectors;
 
 public class AddressBookMain extends AddressBook {
 		
-	public static HashMap<String, AddressBook> addressBookMap = new HashMap<>();
+	public static HashMap<String, AddressBook> StateAddressBookMap = new HashMap<>();
+	public static Map<Object, Object> CityaddressBookMap = new HashMap<>();
 	
 	public void addPersonDetails() {
 		Scanner scanner = new Scanner(System.in);
@@ -44,9 +45,9 @@ public class AddressBookMain extends AddressBook {
 			
 			Person new_person = new Person(firstName, lastName, address, city, state, zip, phoneNum, email);
 					
-			boolean duplicate = addressBookMap.get(state).personList.stream().anyMatch(n -> n.equals(new_person));
+			boolean duplicate = StateAddressBookMap.get(state).personList.stream().anyMatch(n -> n.equals(new_person));
 			if(!duplicate) {
-				addressBookMap.get(state).personList.add(new_person);
+				StateAddressBookMap.get(state).personList.add(new_person);
 			}
 			else {
 				System.out.println("Same contact is already present Hence WILL NOT BE ADDED to address book");
@@ -60,7 +61,7 @@ public class AddressBookMain extends AddressBook {
 	
 	public void searchPersonByCity(String name, String city) {
 		List<Person> list = new ArrayList<Person>();
-		for(Map.Entry<String, AddressBook> entry : addressBookMap.entrySet()) {
+		for(Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
 			list = entry.getValue().getPersonList().stream()
 					.filter(c -> c.getCity().equals(city))
 					.filter(c -> (c.getFirstName() + " " + c.getLastName())
@@ -73,7 +74,7 @@ public class AddressBookMain extends AddressBook {
 	
 	public void searchPersonByState(String name, String state) {
 		List<Person> list = new ArrayList<Person>();
-		for(Map.Entry<String, AddressBook> entry : addressBookMap.entrySet()) {
+		for(Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
 			list = entry.getValue().getPersonList().stream()
 					.filter(c -> c.getState().equals(state))
 					.filter(c -> (c.getFirstName() + " " + c.getLastName())
@@ -84,6 +85,43 @@ public class AddressBookMain extends AddressBook {
 		}
 	}
 	
+//	public void makeCityDictionary() {
+//		CityaddressBookMap = StateAddressBookMap.entrySet().stream().
+//				collect(Collectors.toMap(
+//				entry -> entry.getValue().getPersonList().stream().getCity(),
+//				entry -> entry.getValue()));
+//		
+//		List<Person> list = new ArrayList<>();
+//		for(Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
+//			list = entry.getValue().getPersonList().stream().filter(c-> c.getState().equals(state))
+//					.collect(Collectors.toList());
+//		}
+//		
+//		CityaddressBookMap = list.stream().collect(
+//                Collectors.toMap(Person.getCity(), Hosting::getName));
+//	}
+	
+	public void viewPersonsByCity(String city) {
+		List<Person> list = new ArrayList<Person>();
+		for(Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
+			list = entry.getValue().getPersonList().stream().filter(c -> c.getState().equals(city))
+					.collect(Collectors.toList());
+		}
+		for(Person c : list) {
+			System.out.println(c);
+		}
+	}
+	
+	public void viewPersonsByState(String state) {
+		List<Person> list = new ArrayList<Person>();
+		for(Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
+			list = entry.getValue().getPersonList().stream().filter(s -> s.getState().equals(state))
+					.collect(Collectors.toList());
+		}
+		for(Person c : list) {
+			System.out.println(c);
+		}
+	}
 	
 	public static void main(String[] args) {
 		
@@ -95,13 +133,14 @@ public class AddressBookMain extends AddressBook {
 		String addressBookName = scanner.nextLine();
 		AddressBookMain addressBookMain = new AddressBookMain();
 		AddressBook NewAddressBook = new AddressBook(addressBookName);
-		addressBookMap.put(addressBookName, NewAddressBook);
+		StateAddressBookMap.put(addressBookName, NewAddressBook);
 		addressBookMain.addPersonDetails();
 		
 		String yes = "y";
 		
 		do {
-			System.out.println("1. Add contact\n2. Edit contact\n3. Delete contact\n4. Add new Address Book\n5. Search person by city\n6. Search person by state");
+			System.out.println("1. Add contact\n2. Edit contact\n3. Delete contact\n4. Add new Address Book\n5. Search person by city\n6. Search person by state"
+					+ "\n7. View persons by city \n8. View by state");
 			int option = scanner.nextInt();
 			switch(option) {
 			case 1:
@@ -110,32 +149,42 @@ public class AddressBookMain extends AddressBook {
 			case 2:
 				System.out.println("Enter name of address book");
 				String name = scanner.nextLine();
-				addressBookMap.get(name).editPersonDetails();
+				StateAddressBookMap.get(name).editPersonDetails();
 				break;
 			case 3:
 				System.out.println("Enter name of address book");
 				name = scanner.nextLine();
-				addressBookMap.get(name).deletePersonDetails();
+				StateAddressBookMap.get(name).deletePersonDetails();
 				break;
 			case 4:
 				System.out.println("Enter Address Book name : ");
 				name = scanner.nextLine();
 				NewAddressBook = new AddressBook(name);
-				addressBookMap.put(name, NewAddressBook);
+				StateAddressBookMap.put(name, NewAddressBook);
 				break;
 			case 5:
 				System.out.println("Enter the name to search : ");
 				String person = scanner.nextLine();
 				System.out.println("Enter the city : ");
 				String city = scanner.nextLine();
-				addressBookMain.searchPersonByCity(person,city);
+				addressBookMain.searchPersonByCity(person, city);
 				break;
 			case 6:
 				System.out.println("Enter the name to search : ");
 				person = scanner.nextLine();
 				System.out.println("Enter the state : ");
 				String state = scanner.nextLine();
-				addressBookMain.searchPersonByCity(person,state);
+				addressBookMain.searchPersonByCity(person, state);
+				break;
+			case 7:
+				System.out.println("Enter the city : ");
+				city = scanner.nextLine();
+				addressBookMain.viewPersonsByCity(city);
+				break;
+			case 8:
+				System.out.println("Enter the state : ");
+				state = scanner.nextLine();
+				addressBookMain.viewPersonsByState(state);
 				break;
 			default:
 				System.out.println("Select correct choice");
