@@ -1,12 +1,19 @@
 package AddressBookMain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AddressBook {
-	private String AddressBookName;
+	private String AddressBookName; 
 	public List <Person> personList;
+	
+	public List<Person> getPersonList(){
+		return personList;
+	}
 	
 	public AddressBook(String AddressBookName) {
 		personList = new ArrayList<Person>();
@@ -15,61 +22,6 @@ public class AddressBook {
 	
 	public AddressBook() {
 		personList = new ArrayList<Person>();
-	}
-	
-	public String getName() {
-		return AddressBookName;
-	}
-	
-	public void addPersonDetails() {
-		Scanner scanner = new Scanner(System.in);
-		
-		String checkToAdd = "y";
-		
-		while(checkToAdd.equalsIgnoreCase("y")) {
-			//variables
-			String firstName;
-			String lastName;
-			String address;
-			String city;
-			String state;
-			int zip;
-			long  phoneNum;
-			String email;
-			
-			System.out.println("Enter following details : ");
-			System.out.println("First Name : ");
-			firstName = scanner.nextLine();
-			System.out.println("Last Name : ");
-			lastName = scanner.nextLine();
-			System.out.println("Address : ");
-			address = scanner.nextLine();
-			System.out.println("City : ");
-			city = scanner.nextLine();
-			System.out.println("State : ");
-			state = scanner.nextLine();
-			System.out.println("ZIP : ");
-			zip = scanner.nextInt();
-			System.out.println("Phone number : ");
-			phoneNum = scanner.nextLong();
-			scanner.nextLine();
-			System.out.println("Email ID : ");
-			email = scanner.nextLine();
-			
-			Person new_person = new Person(firstName, lastName, address, city, state, zip, phoneNum, email);
-					
-			boolean duplicate = personList.stream().anyMatch(n -> n.equals(new_person));
-			if(!duplicate) {
-				personList.add(new_person);
-			}
-			else {
-				System.out.println("Same contact is already present Hence WILL NOT BE ADDED to address book");
-			}
-			
-			System.out.println("Enter 'y' to ADD NEW PERSON'S DETAILS.\nEnter any other key to STOP ADDING.");
-			checkToAdd = scanner.nextLine();
-		}
-		
 	}
 	
 	public void editPersonDetails() {
@@ -124,7 +76,6 @@ public class AddressBook {
 		FirstName = scanner.nextLine();
 		System.out.println("Last Name : ");
 		LastName = scanner.nextLine();
-		
 		for(Person thatPerson : personList) {
 			if(FirstName.equalsIgnoreCase(thatPerson.getFirstName()) && LastName.equalsIgnoreCase(thatPerson.getLastName())) {
 				personList.remove(thatPerson);
