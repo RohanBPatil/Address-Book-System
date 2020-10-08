@@ -1,6 +1,10 @@
 package AddressBookMain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class AddressBookMain extends AddressBook {
@@ -149,9 +153,25 @@ public class AddressBookMain extends AddressBook {
 					.sorted((p1, p2) -> p1.getName().compareTo(p2.getName())).collect(Collectors.toList());
 		}
 
-		System.out.println("Sorted list : ");
+		System.out.println("Sorted list of names: ");
 		for (Person list : personList) {
 			System.out.println(list.getName());
+		}
+	}
+
+	/**
+	 * sorting by zip
+	 */
+	public void sortByZip() {
+		List<Person> personList = new ArrayList<>();
+		for (Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
+			personList = entry.getValue().getPersonList().stream()
+					.sorted((p1, p2) -> Integer.compare(p1.getZip(), p2.getZip())).collect(Collectors.toList());
+		}
+
+		System.out.println("Sorted list of ZIPs : ");
+		for (Person list : personList) {
+			System.out.println(list.getZip());
 		}
 	}
 
@@ -173,7 +193,7 @@ public class AddressBookMain extends AddressBook {
 		do {
 			System.out.println(
 					"1. Add contact\n2. Edit contact\n3. Delete contact\n4. Add new Address Book\n5. Search person by city\n6. Search person by state"
-							+ "\n7. View persons by city \n8. View by state\n9. Count by city\n10. Count by state\n11. Sort by name");
+							+ "\n7. View persons by city \n8. View by state\n9. Count by city\n10. Count by state\n11. Sort by name\n12. Sort by ZIP");
 			int option = scanner.nextInt();
 			switch (option) {
 			case 1:
@@ -231,6 +251,10 @@ public class AddressBookMain extends AddressBook {
 				break;
 			case 11:
 				addressBookMain.sortByName();
+				break;
+			case 12:
+				addressBookMain.sortByZip();
+				break;
 			default:
 				System.out.println("Select correct choice");
 				break;
