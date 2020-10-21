@@ -1,4 +1,4 @@
-package AddressBookMain;
+package com.rohan.addressbooksystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,6 @@ public class AddressBookMain extends AddressBook {
 	};
 
 	public static HashMap<String, AddressBook> StateAddressBookMap = new HashMap<>();
-	public static Map<Object, Object> CityaddressBookMap = new HashMap<>();
 
 	/**
 	 * @param scanner
@@ -54,8 +53,16 @@ public class AddressBookMain extends AddressBook {
 
 			Person newPerson = new Person(firstName, lastName, address, city, state, zip, phoneNum, email);
 
-			boolean duplicate = StateAddressBookMap.values().stream().map(obj -> obj.getPersonList())
-					.anyMatch(personList -> personList.contains(newPerson));
+			boolean duplicate;
+			try {
+				duplicate = StateAddressBookMap.values().stream().map(obj -> obj.getPersonList())
+						.anyMatch(personList -> personList.contains(newPerson));
+			} catch (NullPointerException e) {
+				System.out.println("This contact will not be added");
+				System.out.println(
+						"Entered state name's address book is not present. First add new address book and then add this contact");
+				return;
+			}
 			if (!duplicate) {
 				StateAddressBookMap.get(state).personList.add(newPerson);
 			} else {
@@ -104,7 +111,7 @@ public class AddressBookMain extends AddressBook {
 	public void viewPersonsByCity(String city) {
 		List<Person> list = new ArrayList<Person>();
 		for (Map.Entry<String, AddressBook> entry : StateAddressBookMap.entrySet()) {
-			list = entry.getValue().getPersonList().stream().filter(c -> c.getState().equals(city))
+			list = entry.getValue().getPersonList().stream().filter(c -> c.getCity().equals(city))
 					.collect(Collectors.toList());
 		}
 		for (Person c : list) {
@@ -201,6 +208,29 @@ public class AddressBookMain extends AddressBook {
 		}
 	}
 
+	/**
+	 * reads data from addressbook.csv file
+	 * 
+	 * @param ioService
+	 */
+	public void readDataCSV(IOServices ioService) {
+		if (ioService.equals(IOServices.FILE_IO)) {
+			new AddressBookFileService().readDataCSV();
+		}
+	}
+
+	/**
+	 * writes data to addressbook.csv file
+	 * 
+	 * @param ioService
+	 */
+	public void writeDataCSV(IOServices ioService) {
+		if (ioService.equals(IOServices.FILE_IO)) {
+			new AddressBookFileService().writeDataCSV(StateAddressBookMap);
+		}
+
+	}
+
 	public static void main(String[] args) {
 
 		System.out.println("WELCOME TO ADDRESS BOOK");
@@ -219,7 +249,7 @@ public class AddressBookMain extends AddressBook {
 		do {
 			System.out.println(
 					"1. Add contact\n2. Edit contact\n3. Delete contact\n4. Add new Address Book\n5. Search person by city\n6. Search person by state"
-							+ "\n7. View persons by city \n8. View by state\n9. Count by city\n10. Count by state\n11. Sort by name\n12. Sort by ZIP\n13. Write to file\n14. Read from console");
+							+ "\n7. View persons by city \n8. View by state\n9. Count by city\n10. Count by state\n11. Sort by name\n12. Sort by ZIP\n13. Write to file\n14. Read from console\n15. Write to CSV file\n16. Read from CSV file");
 			int option = scanner.nextInt();
 			scanner.nextLine();
 			switch (option) {
@@ -244,17 +274,17 @@ public class AddressBookMain extends AddressBook {
 				break;
 			case 5:
 				System.out.println("Enter the name to search : ");
-				String person = scanner.nextLine();
+				String personName = scanner.nextLine();
 				System.out.println("Enter the city : ");
 				String city = scanner.nextLine();
-				addressBookMain.searchPersonByCity(person, city);
+				addressBookMain.searchPersonByCity(personName, city);
 				break;
 			case 6:
 				System.out.println("Enter the name to search : ");
-				person = scanner.nextLine();
+				personName = scanner.nextLine();
 				System.out.println("Enter the state : ");
 				String state = scanner.nextLine();
-				addressBookMain.searchPersonByCity(person, state);
+				addressBookMain.searchPersonByCity(personName, state);
 				break;
 			case 7:
 				System.out.println("Enter the city : ");
@@ -287,6 +317,12 @@ public class AddressBookMain extends AddressBook {
 				break;
 			case 14:
 				addressBookMain.readData(IOServices.FILE_IO);
+				break;
+			case 15:
+				addressBookMain.writeDataCSV(IOServices.FILE_IO);
+				break;
+			case 16:
+				addressBookMain.readDataCSV(IOServices.FILE_IO);
 				break;
 			default:
 				System.out.println("Select correct choice");

@@ -1,4 +1,4 @@
-package AddressBookMain;
+package com.rohan.addressbooksystem;
 
 public class Person {
 	private String firstName;

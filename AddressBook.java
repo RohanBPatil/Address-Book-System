@@ -1,4 +1,4 @@
-package AddressBookMain;
+package com.rohan.addressbooksystem;
 
 import java.util.ArrayList;
 import java.util.List;
