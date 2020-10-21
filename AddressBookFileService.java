@@ -1,5 +1,6 @@
 package com.rohan.addressbooksystem;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,11 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonStreamParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 public class AddressBookFileService {
 	public static String FILE_NAME = "AddressBook.txt";
+	public static String CSV_FILE_NAME = "C:\\Users\\abc\\eclipse-workspace\\addressbooksystem\\src\\main\\java\\com\\rohan\\addressbooksystem/addressbook.csv";
+	public static String GSON_FILE_NAME = "C:\\Users\\abc\\eclipse-workspace\\addressbooksystem\\src\\main\\java\\com\\rohan\\addressbooksystem/addressbook.json";
 
 	public void writeData(Map<String, AddressBook> stateAddressBookMap) {
 		StringBuffer personBuffer = new StringBuffer();
@@ -41,8 +47,7 @@ public class AddressBookFileService {
 
 	public void writeDataCSV(Map<String, AddressBook> stateAddressBookMap) {
 
-		File file = new File(
-				"C:\\Users\\abc\\eclipse-workspace\\addressbooksystem\\src\\main\\java\\com\\rohan\\addressbooksystem/addressbook.csv");
+		File file = new File(CSV_FILE_NAME);
 
 		try {
 			FileWriter outputfile = new FileWriter(file);
@@ -52,7 +57,7 @@ public class AddressBookFileService {
 					"Email ID" };
 			data.add(header);
 			stateAddressBookMap.values().stream().map(entry -> entry.getPersonList())
-					.forEach(entryt -> entryt.forEach(person -> {
+					.forEach(listEntry -> listEntry.forEach(person -> {
 						String[] personData = { person.getFirstName(), person.getLastName(), person.getAddress(),
 								person.getCity(), person.getState(), Integer.toString(person.getZip()),
 								Long.toString(person.getPhoneNumber()), person.getEmail() };
@@ -70,8 +75,7 @@ public class AddressBookFileService {
 
 	public void readDataCSV() {
 		try {
-			FileReader filereader = new FileReader(
-					"C:\\Users\\abc\\eclipse-workspace\\addressbooksystem\\src\\main\\java\\com\\rohan\\addressbooksystem/addressbook.csv");
+			FileReader filereader = new FileReader(CSV_FILE_NAME);
 			CSVReader csvReader = new CSVReader(filereader);
 			String[] nextRecord;
 
@@ -85,6 +89,43 @@ public class AddressBookFileService {
 			csvReader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void writeDataGSON(Map<String, AddressBook> stateAddressBookMap) {
+		try {
+			Gson gson = new Gson();
+			FileWriter writer = new FileWriter(GSON_FILE_NAME);
+			stateAddressBookMap.values().stream().map(entry -> entry.getPersonList())
+					.forEach(listEntry -> listEntry.forEach(person -> {
+						String json = gson.toJson(person);
+						try {
+							writer.write(json);
+						} catch (IOException exception) {
+							exception.printStackTrace();
+						}
+					}));
+			writer.close();
+			System.out.println("Data entered successfully to addressbook.json file.");
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
+
+	public void readDataGSON() {
+		Gson gson = new Gson();
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(GSON_FILE_NAME));
+			JsonStreamParser parser = new JsonStreamParser(bufferedReader);
+			while (parser.hasNext()) {
+				JsonElement json = parser.next();
+				if (json.isJsonObject()) {
+					Person person = gson.fromJson(json, Person.class);
+					System.out.println(person);
+				}
+			}
+		} catch (IOException exception) {
+			exception.printStackTrace();
 		}
 	}
 

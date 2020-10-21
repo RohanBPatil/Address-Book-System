@@ -10,6 +10,10 @@ public class Person {
 	private long phoneNum;
 	private String email;
 
+	public Person() {
+
+	}
+
 	public Person(String firstName, String lastName, String address, String city, String state, int zip, long phoneNum,
 			String email) {
 		this.firstName = firstName;
